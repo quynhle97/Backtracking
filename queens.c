@@ -1,95 +1,39 @@
 #include <stdio.h>
 
-int duocDat(int a[][8], int N, int hang, int cot);
-int datHau(int a[][8], int N, int cot);
-void xuatmang(int a[][8], int N);
+void quanHau(int a[][100], int cot, int N, int hang[], int db_tn[], int dn_tb[]);
 
 int main()
 {
-    int a[8][8] = {
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0}
-    };
-
-    datHau(a, 8, 0);
-    xuatmang(a, 8);
-
+    int a[100][100] = {{0}}, N, db_tn[100] = {0}, dn_tb[100] = {0}, hang[100] = {0};
+    printf("Nhap N: ");
+    scanf("%d", &N);
+    quanHau(a,0,N,hang,db_tn,dn_tb);
     return 0;
 }
 
-void xuatmang(int a[][8], int N) {
-    printf("Xuat mang\n");
-    for (int i=0; i<N; i++) {
-        for (int j=0; j<N; j++) {
-            printf("%d ", a[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-int duocDat(int a[][8], int N, int hang, int cot) {
-    for (int i=0; i<N; i++)
-        if (a[hang][i] == 1) return 0;
-
-    int tmp_h = hang, tmp_c = cot;
-
-    while (tmp_h >= 0 && tmp_c >=0) {
-        if (a[tmp_h][tmp_c] == 1) return 0;
-        else {
-            tmp_h--;
-            tmp_c--;
-        }
-    }
-
-    tmp_h = hang; tmp_c = cot;
-    while (tmp_h <= N && tmp_c <= N) {
-        if (a[tmp_h][tmp_c] == 1) return 0;
-        else {
-            tmp_h++;
-            tmp_c++;
-        }
-    }
-
-    tmp_h = hang; tmp_c = cot;
-    while (tmp_h >= 0 && tmp_c <= N) {
-        if (a[tmp_h][tmp_c] == 1) return 0;
-        else {
-            tmp_h--;
-            tmp_c++;
-        }
-    }
-
-    tmp_h = hang; tmp_c = cot;
-    while (tmp_h <= N && tmp_c >= 0) {
-        if (a[tmp_h][tmp_c] == 1) return 0;
-        else {
-            tmp_h++;
-            tmp_c--;
-        }
-    }
-
-    return 1;
-}
-
-int datHau(int a[][8], int N, int cot) {
+void quanHau(int a[][100], int cot, int N, int hang[], int db_tn[], int dn_tb[]) {
     if (cot == N) {
-        return 1;
-    }
-
-    for (int i=0; i<N; i++) {
-        if (duocDat(a, N, i, cot) == 1) {
-            a[i][cot] = 1;
-            if (datHau(a, N, cot + 1) == 1)
-                return 1;
-            a[i][cot] = 0;
+        printf("Ban co quan Hau\n");
+        for (int l=0; l<N; l++) {
+            for (int m=0; m<N; m++) {
+                printf("%d ", a[l][m]);
+            }
+            printf("\n");
+        }
+    } else {
+        for (int i=0; i<N; i++) {
+            if (hang[i] == 0 && db_tn[i-cot+N-1] == 0 && dn_tb[i+cot] == 0) {
+                a[i][cot] = 1;
+                hang[i] = -1;
+                db_tn[i-cot+N-1] = -1;
+                dn_tb[i+cot] = -1;
+                quanHau(a,cot+1,N,hang,db_tn,dn_tb);
+                a[i][cot] = 0;
+                hang[i] = 0;
+                db_tn[i-cot+N-1] = 0;
+                dn_tb[i+cot] = 0;
+            }
         }
     }
-
-    return 0;
 }
+
