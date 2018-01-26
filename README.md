@@ -1,2 +1,2 @@
 # QueensBacktracking
-QueensBacktracking
+N - Queens Backtracking Algorithm
